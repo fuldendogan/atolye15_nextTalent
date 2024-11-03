@@ -1,0 +1,152 @@
+type Query {
+  getUserProfile(userId: ID!): UserProfile
+  getApplications(userId: ID!, status: ApplicationStatus): [Application]
+  getApplicationResult(applicationId: ID!): ApplicationResult
+  getProjects(status: ProjectStatus): [Project]
+  getProjectDetails(ProjectId: ID!): Project
+}
+
+type UserProfile {
+  id: ID!
+  name: String
+  surname: String
+  email: String
+  country: String
+  city: String
+  phoneNumber: String
+  profilePicture: String
+  coreSkills: [CoreSkill]
+  detailedInformation: DetailedInformation
+  links: [Link]
+  workingExperiences: [Experience]
+}
+
+type CoreSkill {
+  technology: Technology
+  experienceLevel: ExperienceLevel
+}
+
+type DetailedInformation {
+  experienceStartDate: Int
+  preferredEmploymentType: ContractType
+  hoursPerWeek: Int
+  mainProfession: SpecializationType
+  experienceLevel: ExperienceLevel
+  cv: Link
+}
+
+type Link {
+  url: String
+  description: String
+}
+
+type Experience {
+  industry: String
+  companyName: String
+  position: SpecializationType
+  duration: Int # Ay olarak süre
+  teamSize: String # "5-10"
+}
+
+type Application {
+  id: ID!
+  projectId: ID!
+  appliedPosition: String
+  status: ApplicationStatus
+  applicationDate: String
+  specialization: Specialization
+}
+
+type Project {
+  id: ID!
+  matchScore: Int
+  title: String
+  description: String
+  contract: Contract
+  active: Boolean
+  priorityLevel: Int
+  createdAt: String
+  positions: [Position]
+}
+
+type Position {
+  id: ID!
+  projectId: ID!
+  specialization: Specialization
+  capacity: Int
+  remainingCapacity: Int
+  experienceLevel: ExperienceLevel
+  technologies: [Technology]
+}
+
+type Contract {
+  duration: String
+  type: ContractType
+  hoursPerWeek: Int
+}
+
+type Specialization {
+  id: ID!
+  name: SpecializationType
+}
+
+type Technology {
+  id: ID!
+  name: String
+  experienceLevel: ExperienceLevel
+}
+
+union ApplicationResult =
+    ApplicationApproved
+  | ApplicationPending
+  | ApplicationRejected
+
+type ApplicationApproved {
+  application: Application
+  approvedDate: String
+  reviewerName: String
+}
+
+type ApplicationPending {
+  application: Application
+  pendingReason: String
+}
+
+type ApplicationRejected {
+  application: Application
+  rejectionReason: String
+  rejectionDate: String
+}
+
+enum SpecializationType {
+  BACKEND
+  FRONTEND
+  FULLSTACK
+  MOBILE
+  AI
+  QA
+  DEVOPS
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ProjectStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum ContractType {
+  HOURLY
+  FIXED
+}
+
+enum ExperienceLevel {
+  JUNIOR
+  MID
+  MIDPLUS
+  SENIOR
+}
